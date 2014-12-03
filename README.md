@@ -7,6 +7,7 @@ Setuptools currently unavailable. For now, put the scripts under src/ into your 
 
 There are two main functions:
 
-getForecastAnalysis(var, lat, lon)
-getWeatherAnalysis(lat, lon)
+    getForecastAnalysis(var, lat, lon)
+
+    getWeatherAnalysis(lat, lon)
 
