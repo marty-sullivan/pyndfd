@@ -143,7 +143,7 @@ def validateArguments(var, area, timeStep, minTime, maxTime):
     if not validVar:
         raise ValueError('Variable not available in area: ' + area)
 
-def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None, maxTime=None, area=None, shiftX=0, shiftY=0):
+def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None, maxTime=None, area=None):
     if n < 0:
         raise ValueError('n must be >= 0')
     if area == None:
@@ -216,7 +216,7 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                                     eVal = float('nan')
                                 eVals.append(eVal)
             except IndexError:
-                raise ValueError('Given coordinates go beyond the grid. Use different coordinates, use a smaller n value or shiftX/Y')
+                raise ValueError('Given coordinates go beyond the grid. Use different coordinates, a larger area or use a smaller n value.')
             
             forecast = { }
             forecast['points'] = len(vals)
