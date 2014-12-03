@@ -2,6 +2,7 @@ from bitstring import BitArray
 from datetime import datetime, timedelta
 from math import isnan, sqrt
 from ncepgrib2 import Grib2Decode as ncepgrib
+from numpy.ma.core import MaskedConstant as NAN
 from os import mkdir, path
 from pyproj import Geod, Proj
 from subprocess import call
@@ -193,18 +194,30 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                 eVals = []
             try:
                 if n == 0:
-                    vals.append(grb.values[y][x])
+                    val = grb.values[y][x]
+                    if type(val) == NAN:
+                        val = float('nan')
+                    vals.append(val)
                     if elev:
-                        eVals.append(e.values[eY][eX])
+                        eVal = e.values[eY][eX]
+                        if type(eVal) == NAN:
+                            eVal = float('nan')
+                        eVals.append(eVal)
                 else:
                     for i in range(min(n, negN), max(n, negN) + 1):
                         for j in range(min(n, negN), max(n, negN) + 1):
-                            vals.append(grb.values[y + j][x + i])
+                            val = grb.values[y + j][x + i]
+                            if type(val) == NAN:
+                                val = float('nan')
+                            vals.append(val)
                             if elev:
-                                eVals.append(e.values[eY + j][eX + i])
+                                eVal = e.values[eY + j][eX + i]
+                                if type(eVal) == NAN:
+                                    eVal = float('nan')
+                                eVals.append(eVal)
             except IndexError:
                 raise ValueError('Given coordinates go beyond the grid. Use different coordinates, use a smaller n value or shiftX/Y')
-
+            
             forecast = { }
             forecast['points'] = len(vals)
             forecast['min'] = min(vals)
@@ -446,7 +459,7 @@ def getWeatherAnalysis(lat, lon, timeStep=1, minTime=None, maxTime=None, area=No
             
             ncepgrb = ncepgrbs[grb.messagenumber - 1]
             if not ncepgrb.has_local_use_section:
-                raise RuntimeError('Unable to read wx definitions from grib. Is it not a wx grib file??')
+                raise RuntimeError('Unable to read wwa definitions from grib. Is it not a wwa grib file??')
 
             x, y, gridX, gridY, gLat, gLon = getNearestGridPoint(grb, lat, lon)
             try:
