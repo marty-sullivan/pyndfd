@@ -28,7 +28,6 @@ def setLocalCacheServer(uri):
     global NDFD_LOCAL_SERVER 
     NDFD_LOCAL_SERVER = uri
 
-
 def stdDev(vals):
     mean = sum(vals) / len(vals)
     squared = []
@@ -251,7 +250,7 @@ def unpackString(raw):
 
     codes = []
     for line in msg.splitlines():
-        if len(line) >= 4 and (line.count(':') >= 4 or line.count('.') == 1 or '<None>' in line):
+        if len(line) >= 4 and (line.count(':') >= 4 or line.count('.') >= 1 or '<None>' in line):
             codes.append(line)
 
     return codes
