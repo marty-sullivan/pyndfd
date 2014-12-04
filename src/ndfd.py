@@ -289,7 +289,7 @@ def validateArguments(var, area, timeStep, minTime, maxTime):
 			smallest grid the supplied coordinates lie in.
 
 '''
-def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None, maxTime=None, area=None):
+def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None, maxTime=None, area=None):
     if n < 0:
         raise ValueError('n must be >= 0')
     if area == None:
@@ -331,7 +331,13 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                 analysis['gridLat'] = gLat
                 analysis['gridLon'] = gLon
                 analysis['units'] = grb['parameterUnits']
-                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)[-1]
+                try: 
+                    analysis['deltaX'] = grb['DxInMetres']
+                    analysis['deltaY'] = grb['DyInMetres']
+                except:
+                    analysis['deltaX'] = grb['DiInMetres']
+                    analysis['deltaY'] = grb['DjInMetres']
+                analysis['distance'] = G.inv(lon, lat, gLon, gLat)[-1]
                 firstRun = False
             
             vals = []
@@ -627,7 +633,13 @@ def getWeatherAnalysis(lat, lon, timeStep=1, minTime=None, maxTime=None, area=No
             if firstRun:
                 analysis['gridLat'] = gLat
                 analysis['gridLon'] = gLon
-                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)[-1]
+                try: 
+                    analysis['deltaX'] = grb['DxInMetres']
+                    analysis['deltaY'] = grb['DyInMetres']
+                except:
+                    analysis['deltaX'] = grb['DiInMetres']
+                    analysis['deltaY'] = grb['DjInMetres']
+                analysis['distance'] = G.inv(lon, lat, gLon, gLat)[-1]
                 firstRun = False
 
             try:
