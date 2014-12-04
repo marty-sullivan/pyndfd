@@ -321,7 +321,7 @@ WX_VARS = \
     'IF': 'ice fog',
     'ZF': 'freezing fog',
     'VA': 'volcanic ash',
-    'T': 'thunder',
+    'T': 'thunderstorms',
     'R': 'rain',
     'L': 'drizzle',
     'ZL': 'freezing drizzle',
