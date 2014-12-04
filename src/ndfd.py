@@ -185,20 +185,20 @@ def getElevationVariable(area):
 	lat:	Latitude 
 	lon:	Longitude
 
-  Notes:
-	- Doesn't work for oceanic and northern pacific ocean grids
-
 '''
 def getSmallestGrid(lat, lon):
-    smallest = 'conus'
+    smallest = 'neast'
+    minDist = G.inv(lon, lat, DEFS['grids'][smallest]['lonC'], DEFS['grids'][smallest]['latC'])
 
     for area in DEFS['grids'].keys():
+        if area == 'conus' or area == 'nhemi' or area == 'npacocn':
+            continue
         curArea = DEFS['grids'][area]
         smallArea = DEFS['grids'][smallest]
-        if curArea['size'] < smallArea['size']:
-            if lat >= curArea['lat1'] and lat <= curArea['lat2']:
-                if lon >= curArea['lon1'] and lon <= curArea['lon2']:
-                    smallest = area
+        dist = G.inv(lon, lat, curArea['lonC'], curArea['latC'])[-1]
+        if dist < minDist:
+            minDist = dist
+            smallest = area
 
     return smallest
 
@@ -256,13 +256,13 @@ def validateArguments(var, area, timeStep, minTime, maxTime):
     #if maxTime > ...
     
     try:
-        area = DEFS['vars'][area]
+        areaVP = DEFS['vars'][area]
     except IndexError:
         raise ValueError('Invalid Area.')
 
     validVar = False
-    for vp in area:
-        if var in area[vp]:
+    for vp in areaVP:
+        if var in areaVP[vp]:
             validVar = True
             break
     if not validVar:
