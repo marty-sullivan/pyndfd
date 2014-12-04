@@ -1,4 +1,5 @@
 '''
+
 	NDFD Forecast Retrieval Routines
 
 	Author: 	Marty J. Sullivan
@@ -6,6 +7,7 @@
 	Date:		December 3, 2014
 	Purpose:	Routines that will cache NDFD forecast variables locally
 			to allow for easy and fast forecast analysis by lat/lon
+
 '''
 
 ###########
@@ -302,6 +304,8 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
     analysis['forecastTime'] = getLatestForecastTime()
     analysis['forecasts'] = { }
 
+    allVals = []
+
     negN = n * -1
 
     validTimes = []
@@ -327,7 +331,7 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                 analysis['gridLat'] = gLat
                 analysis['gridLon'] = gLon
                 analysis['units'] = grb['parameterUnits']
-                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)
+                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)[-1]
                 firstRun = False
             
             vals = []
@@ -342,11 +346,14 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                     if type(val) == NAN:
                         val = float('nan')
                     vals.append(val)
+                    allVals.append(val)
+                    nearestVal = val
                     if elev:
                         eVal = e.values[eY][eX]
                         if type(eVal) == NAN:
                             eVal = float('nan')
                         eVals.append(eVal)
+                        eNearestVal = eVal
                 else:
                     for i in range(min(n, negN), max(n, negN) + 1):
                         for j in range(min(n, negN), max(n, negN) + 1):
@@ -354,15 +361,21 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
                             if type(val) == NAN:
                                 val = float('nan')
                             vals.append(val)
+                            allVals.append(val)
+                            if i == 0 and j == 0:
+                                nearestVal = val
                             if elev:
                                 eVal = e.values[eY + j][eX + i]
                                 if type(eVal) == NAN:
                                     eVal = float('nan')
                                 eVals.append(eVal)
+                                if i == 0 and j == 0:
+                                    eNearestVal = eVal
             except IndexError:
                 raise ValueError('Given coordinates go beyond the grid. Use different coordinates, a larger area or use a smaller n value.')
             
             forecast = { }
+            forecast['nearest'] = nearestVal
             forecast['points'] = len(vals)
             forecast['min'] = min(vals)
             forecast['max'] = max(vals)
@@ -372,6 +385,7 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
 
             if elev:
                 elevation = { }
+                elevation['nearest'] = eNearestVal
                 elevation['points'] = len(eVals)
                 elevation['min'] = min(eVals)
                 elevation['max'] = max(eVals)
@@ -385,6 +399,13 @@ def getForecastAnalysis(var, lat, lon, n=1, timeStep=1, elev=False, minTime=None
              
             analysis['forecasts'][t] = forecast
         grbs.close()
+
+    analysis['min'] = min(allVals)
+    analysis['max'] = max(allVals)
+    analysis['mean'] = sum(allVals) / len(allVals)
+    analysis['median'] = median(allVals)
+    analysis['stdDev'] = stdDev(allVals)
+
     return analysis
 
 '''
@@ -606,7 +627,7 @@ def getWeatherAnalysis(lat, lon, timeStep=1, minTime=None, maxTime=None, area=No
             if firstRun:
                 analysis['gridLat'] = gLat
                 analysis['gridLon'] = gLon
-                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)
+                analysis['distanceM'] = G.inv(lon, lat, gLon, gLat)[-1]
                 firstRun = False
 
             try:
