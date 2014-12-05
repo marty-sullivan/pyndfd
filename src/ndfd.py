@@ -292,6 +292,8 @@ def validateArguments(var, area, timeStep, minTime, maxTime):
 def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None, maxTime=None, area=None):
     if n < 0:
         raise ValueError('n must be >= 0')
+    negN = n * -1
+
     if area == None:
         area = getSmallestGrid(lat, lon)
     validateArguments(var, area, timeStep, minTime, maxTime)
@@ -305,9 +307,7 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
     analysis['forecasts'] = { }
 
     allVals = []
-
-    negN = n * -1
-
+    
     validTimes = []
     for hour in range(0, 250, timeStep):
         t = analysis['forecastTime'] - timedelta(hours=analysis['forecastTime'].hour) + timedelta(hours=hour)
@@ -382,23 +382,25 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
             
             forecast = { }
             forecast['nearest'] = nearestVal
-            forecast['points'] = len(vals)
-            forecast['min'] = min(vals)
-            forecast['max'] = max(vals)
-            forecast['mean'] = sum(vals) / len(vals)
-            forecast['median'] = median(vals)
-            forecast['stdDev'] = stdDev(vals)        
+            if len(vals) > 1:
+                forecast['points'] = len(vals)
+                forecast['min'] = min(vals)
+                forecast['max'] = max(vals)
+                forecast['mean'] = sum(vals) / len(vals)
+                forecast['median'] = median(vals)
+                forecast['stdDev'] = stdDev(vals)        
 
             if elev:
                 elevation = { }
                 elevation['nearest'] = eNearestVal
-                elevation['points'] = len(eVals)
-                elevation['min'] = min(eVals)
-                elevation['max'] = max(eVals)
-                elevation['mean'] = sum(eVals) / len(eVals)
-                elevation['median'] = median(eVals)
-                elevation['stdDev'] = stdDev(eVals)
                 elevation['units'] = e['parameterUnits']
+                if len(eVals) > 1:
+                    elevation['points'] = len(eVals)
+                    elevation['min'] = min(eVals)
+                    elevation['max'] = max(eVals)
+                    elevation['mean'] = sum(eVals) / len(eVals)
+                    elevation['median'] = median(eVals)
+                    elevation['stdDev'] = stdDev(eVals)
                 analysis['elevation'] = elevation
                 eGrbs.close()
                 elev = False
