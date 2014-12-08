@@ -171,7 +171,7 @@ def getElevationVariable(area):
     if NDFD_LOCAL_SERVER == None:
         raise RuntimeError('Local cache server must provide elevation data. Specify cache server with ndfd.setLocalCacheServer(uri)')
     if not path.isdir(NDFD_TMP):
-        mkdir(NDFD_TMP)
+        makedirs(NDFD_TMP)
     remoteVar = NDFD_LOCAL_SERVER + NDFD_STATIC.format(area) + NDFD_VAR.format('elev')
     localDir = NDFD_TMP + NDFD_STATIC.format(area)
     localVar = localDir + NDFD_VAR.format('elev')
