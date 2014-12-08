@@ -21,11 +21,10 @@ from datetime import datetime, timedelta
 from math import isnan, sqrt
 from ncepgrib2 import Grib2Decode as ncepgrib
 from numpy.ma.core import MaskedConstant as NAN
-from os import mkdir, path
+from os import makedirs, path
 from pyproj import Geod, Proj
-from subprocess import call
 from sys import stderr
-from urllib import retrieve
+from urllib import urlretrieve
 import json
 import ndfd_defs
 import pygrib
@@ -39,15 +38,13 @@ import pygrib
 DEFS = ndfd_defs.ndfdDefs()
 G = Geod(ellps='clrk66')
 
-CMD_WGET_REMOTE = 'wget -x -nH --cut-dirs=4 -P {0} {1}'
-CMD_WGET_LOCAL = 'wget -x -nH -P {0} {1}'
-
 CACHE_SERVER_BUFFER_MIN = 10
 
 NDFD_LOCAL_SERVER = None
 NDFD_REMOTE_SERVER = 'http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/'
-NDFD_VAR = 'DC.ndfd/AR.{0}/VP.{1}/ds.{2}.bin'
-NDFD_STATIC = 'static/DC.ndfd/AR.{0}/ds.{1}.bin'
+NDFD_DIR = 'DC.ndfd/AR.{0}/VP.{1}/'
+NDFD_STATIC = 'static/DC.ndfd/AR.{0}/'
+NDFD_VAR = 'ds.{0}.bin'
 NDFD_TMP = '/tmp/ndfd/'
 
 ########################
@@ -127,25 +124,29 @@ def getLatestForecastTime():
 def getVariable(var, area):
     gribs = []
     dirTime = NDFD_TMP + getLatestForecastTime().strftime('%Y-%m-%d-%H') + '/'
-    if not path.isdir(NDFD_TMP):
-        mkdir(NDFD_TMP)
     if not path.isdir(dirTime):
-        mkdir(dirTime)
+        makedirs(dirTime)
     if area in DEFS['vars']:
         for vp in DEFS['vars'][area]:
             if var in DEFS['vars'][area][vp]:
-                varName = NDFD_VAR.format(area, vp, var)
+                varDir = NDFD_DIR.format(area, vp)
+                varName = varDir + NDFD_VAR.format(var)
+                localDir = dirTime + varDir
                 localVar = dirTime + varName
+                if not path.isdir(localDir):
+                    makedirs(localDir)
                 if not path.isfile(localVar):
                     if NDFD_LOCAL_SERVER != None:
                         remoteVar = NDFD_LOCAL_SERVER + varName
-                        call(CMD_WGET_LOCAL.format(dirTime, remoteVar).split())
+                        urlretrieve(remoteVar, localVar)
                     else:
                         remoteVar = NDFD_REMOTE_SERVER + varName
-                        call(CMD_WGET_REMOTE.format(dirTime, remoteVar).split())
+                        urlretrieve(remoteVar, localVar)
                 if not path.isfile(localVar):
                     raise RuntimeError('Cannot retrieve NDFD variables at this time. Try again in a moment.')
                 gribs.append(localVar)
+    else:
+        raise ValueError('Invalid Area: ' + str(area))
 
     return gribs
 
@@ -171,10 +172,13 @@ def getElevationVariable(area):
         raise RuntimeError('Local cache server must provide elevation data. Specify cache server with ndfd.setLocalCacheServer(uri)')
     if not path.isdir(NDFD_TMP):
         mkdir(NDFD_TMP)
-    remoteVar = NDFD_LOCAL_SERVER + NDFD_STATIC.format(area, 'elev')
-    localVar = NDFD_TMP + NDFD_STATIC.format(area, 'elev')
+    remoteVar = NDFD_LOCAL_SERVER + NDFD_STATIC.format(area) + NDFD_VAR.format('elev')
+    localDir = NDFD_TMP + NDFD_STATIC.format(area)
+    localVar = localDir + NDFD_VAR.format('elev')
+    if not path.isdir(localDir):
+        makedirs(localDir)
     if not path.isfile(localVar):
-        call(CMD_WGET_LOCAL.format(NDFD_TMP, remoteVar).split())
+        urlretrieve(remoteVar, localVar)
     if not path.isfile(localVar):
         raise RuntimeError('Cannot retrieve NDFD variables at this time. Try again in a moment.')
     return localVar
