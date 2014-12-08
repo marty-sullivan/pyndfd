@@ -25,6 +25,7 @@ from os import mkdir, path
 from pyproj import Geod, Proj
 from subprocess import call
 from sys import stderr
+from urllib import retrieve
 import json
 import ndfd_defs
 import pygrib
@@ -305,8 +306,6 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
     analysis['n'] = n
     analysis['forecastTime'] = getLatestForecastTime()
     analysis['forecasts'] = { }
-
-    allVals = []
     
     validTimes = []
     for hour in range(0, 250, timeStep):
@@ -318,6 +317,7 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
         validTimes.append(t)
     
     varGrbs = getVariable(var, area)
+    allVals = []
     firstRun = True
     for g in varGrbs:
         grbs = pygrib.open(g)
