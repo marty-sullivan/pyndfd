@@ -1,5 +1,2 @@
 *.pyc
 *.swp
-scratch.*
-src/examples.py
-src/demo.py
