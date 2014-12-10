@@ -8,5 +8,8 @@ setup(
   description = 'Python routines for easy caching/retrieval of NWS\'s NDFD variables',
   author = 'Marty J. Sullivan',
   author_email = 'marty.sullivan@cornell.edu',
-  url = '
+  url = 'https://github.com/marty-sullivan/pyndfd',
+  download_url = 'https://github.com/marty-sullivan/pyndfd/tarball/0.1',
+  install_requires = ['numpy', 'pygrib', 'pyproj', 'bitstring']
+  keywords = ['noaa', 'ndfd', 'nws', 'weather', 'forecast']
 )
