@@ -258,8 +258,8 @@ def getNearestGridPoint(grb, lat, lon, projparams=None):
 def validateArguments(var, area, timeStep, minTime, maxTime):
     if timeStep < 1:
         raise ValueError('timeStep must be >= 1')
-    if minTime != None and minTime < getLatestForecastTime():
-        raise ValueError('minTime is before the current forecast time.')
+    #if minTime != None and minTime < getLatestForecastTime():
+    #    raise ValueError('minTime is before the current forecast time.')
     #if maxTime > ...
     
     try:
