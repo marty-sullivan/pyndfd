@@ -40,13 +40,15 @@ from bitstring import BitArray
 from datetime import datetime, timedelta
 from math import isnan, sqrt
 from ncepgrib2 import Grib2Decode as ncepgrib
+from ndfd_defs import ndfdDefs
 from numpy.ma.core import MaskedConstant as NAN
 from os import makedirs, path
 from pyproj import Geod, Proj
 from sys import stderr
+from tempfile import gettempdir
 from urllib import urlretrieve
 import json
-import ndfd_defs
+
 import pygrib
 
 #############
@@ -55,17 +57,17 @@ import pygrib
 #           #
 #############
 
-DEFS = ndfd_defs.ndfdDefs()
+DEFS = ndfdDefs()
 G = Geod(ellps='clrk66')
 
 CACHE_SERVER_BUFFER_MIN = 10
 
 NDFD_LOCAL_SERVER = None
 NDFD_REMOTE_SERVER = 'http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/'
-NDFD_DIR = 'DC.ndfd/AR.{0}/VP.{1}/'
-NDFD_STATIC = 'static/DC.ndfd/AR.{0}/'
+NDFD_DIR = 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep + 'VP.{1}' + path.sep
+NDFD_STATIC = 'static' + path.sep + 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep
 NDFD_VAR = 'ds.{0}.bin'
-NDFD_TMP = '/tmp/ndfd/'
+NDFD_TMP = gettempdir() + path.sep
 
 ########################
 #                      #
@@ -143,7 +145,7 @@ def getLatestForecastTime():
 '''
 def getVariable(var, area):
     gribs = []
-    dirTime = NDFD_TMP + getLatestForecastTime().strftime('%Y-%m-%d-%H') + '/'
+    dirTime = NDFD_TMP + getLatestForecastTime().strftime('%Y-%m-%d-%H') + path.sep
     if not path.isdir(dirTime):
         makedirs(dirTime)
     if area in DEFS['vars']:
