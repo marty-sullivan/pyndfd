@@ -48,7 +48,6 @@ from sys import stderr
 from tempfile import gettempdir
 from urllib import urlretrieve
 import json
-
 import pygrib
 
 #############
