@@ -10,14 +10,14 @@ Package available on PyPI:
 Library Dependencies:
 
 1. Python 2.6+
-2. grib_api
-3. PROJ4
+2. GRIB-API
+3. PROJ.4
 
 Python Dependencies:
 
 1. numpy
-2. pygrib
-3. pyproj
+2. pyproj
+3. pygrib
 4. bitstring
 
 Example:
