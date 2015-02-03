@@ -414,6 +414,7 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
                 forecast['mean'] = sum(vals) / len(vals)
                 forecast['median'] = median(vals)
                 forecast['stdDev'] = stdDev(vals)        
+                forecast['sum'] = sum(vals)
 
             if elev:
                 elevation = { }
@@ -438,6 +439,7 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
     analysis['mean'] = sum(allVals) / len(allVals)
     analysis['median'] = median(allVals)
     analysis['stdDev'] = stdDev(allVals)
+    analysis['sum'] = sum(allVals)
 
     return analysis
 
