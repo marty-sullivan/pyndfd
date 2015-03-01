@@ -36,7 +36,7 @@
 #         #
 ###########
 
-from bitstring import BitArray
+from bitstring import ConstBitStream
 from datetime import datetime, timedelta
 from math import isnan, sqrt
 from ncepgrib2 import Grib2Decode as ncepgrib
@@ -451,25 +451,18 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
 	raw:	The raw byte string containing the packed data
   Notes:
 	- This function is pretty slow and could be optimized with a C routine.
-
 '''
+
 def unpackString(raw):
-    msg = ''
-
-    bits = BitArray(bytes=raw)
-    mask = BitArray('0b01111111')
-
-    i = 0
-    while 1:
-        try:
-            iByte = (bits[i:i + 8] & mask).int
-            if iByte == 0:
-                msg += '\n'
-            elif iByte >= 32 and iByte <= 126:
-                msg += chr(iByte)
-            i += 7
-        except:
-            break
+    num_bytes, remainder = divmod(len(raw) * 8 - 1, 7)
+    bitstream = ConstBitStream(bytes=raw, offset=1) # Offset 1 ignores first bit
+    msg = b''
+    for _ in range(num_bytes):
+        byte = bitstream.read('uint:7')
+        if not byte:
+            msg += b'\n'
+        elif 32 <= byte <= 126:
+            msg += chr(byte)
 
     codes = []
     for line in msg.splitlines():
