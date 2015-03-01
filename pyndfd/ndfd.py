@@ -23,8 +23,7 @@
 	NDFD Forecast Retrieval Routines
 
 	Author: 	Marty J. Sullivan
-	Revision: 	0.1
-	Date:		December 3, 2014
+	Revision: 	0.3
 	Purpose:	Routines that will cache NDFD forecast variables locally
 			to allow for easy and fast forecast analysis by lat/lon
 
