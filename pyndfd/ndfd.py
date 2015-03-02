@@ -35,7 +35,6 @@
 #         #
 ###########
 
-from bitstring import ConstBitStream
 from datetime import datetime, timedelta
 from math import isnan, sqrt
 from ncepgrib2 import Grib2Decode as ncepgrib
@@ -454,14 +453,21 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
 
 def unpackString(raw):
     num_bytes, remainder = divmod(len(raw) * 8 - 1, 7)
-    bitstream = ConstBitStream(bytes=raw, offset=1) # Offset 1 ignores first bit
-    msg = b''
+
+    i = int(raw.encode('hex'), 16)
+    if remainder:
+        i >>= remainder
+
+    msg = []
     for _ in range(num_bytes):
-        byte = bitstream.read('uint:7')
+        byte = i & 127
         if not byte:
-            msg += b'\n'
+            msg.append(ord("\n"))
         elif 32 <= byte <= 126:
-            msg += chr(byte)
+            msg.append(byte)
+        i >>= 7
+    msg.reverse()
+    msg = b"".join(chr(c) for c in msg)
 
     codes = []
     for line in msg.splitlines():
@@ -469,6 +475,7 @@ def unpackString(raw):
             codes.append(line)
 
     return codes
+    
 
 '''
 
