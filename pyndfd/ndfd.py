@@ -1,4 +1,4 @@
-# Copyright (c) 2014 Marty Sullivan
+# Copyright (c) 2015 Marty Sullivan
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 	NDFD Forecast Retrieval Routines
 
 	Author: 	Marty J. Sullivan
-	Revision: 	0.3
+	Revision: 	0.5
 	Purpose:	Routines that will cache NDFD forecast variables locally
 			to allow for easy and fast forecast analysis by lat/lon
 
@@ -96,7 +96,7 @@ def stdDev(vals):
     mean = sum(vals) / len(vals)
     squared = []
     for val in vals:
-        squared.append(pow(val - mean, 2))
+        squared.append(pow(val - mean, 2) * 1.0)
     variance = sum(squared) / len(squared)
     return sqrt(variance)
 
