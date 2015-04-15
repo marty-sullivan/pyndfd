@@ -447,8 +447,6 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
   Purpose:	To unpack the packed binary string in the local use section of NDFD gribs
   Params:
 	raw:	The raw byte string containing the packed data
-  Notes:
-	- This function is pretty slow and could be optimized with a C routine.
 '''
 
 def unpackString(raw):
