@@ -23,7 +23,7 @@
 	NDFD Forecast Retrieval Routines
 
 	Author: 	Marty J. Sullivan
-	Revision: 	0.5
+	Revision: 	0.6
 	Purpose:	Routines that will cache NDFD forecast variables locally
 			to allow for easy and fast forecast analysis by lat/lon
 
@@ -432,12 +432,20 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
             analysis['forecasts'][t] = forecast
         grbs.close()
 
-    analysis['min'] = min(allVals)
-    analysis['max'] = max(allVals)
-    analysis['mean'] = sum(allVals) / len(allVals)
-    analysis['median'] = median(allVals)
-    analysis['stdDev'] = stdDev(allVals)
-    analysis['sum'] = sum(allVals)
+    analysis['min'] = float('nan')
+    analysis['max'] = float('nan')
+    analysis['mean'] = float('nan')
+    analysis['median'] = float('nan')
+    analysis['stdDev'] = float('nan')
+    analysis['sum'] = float('nan')
+
+    if len(allVals) > 1:
+        analysis['min'] = min(allVals)
+        analysis['max'] = max(allVals)
+        analysis['mean'] = sum(allVals) / len(allVals)
+        analysis['median'] = median(allVals)
+        analysis['stdDev'] = stdDev(allVals)
+        analysis['sum'] = sum(allVals)
 
     return analysis
 
@@ -473,7 +481,6 @@ def unpackString(raw):
             codes.append(line)
 
     return codes
-    
 
 '''
 
