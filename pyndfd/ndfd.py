@@ -58,7 +58,7 @@ import pygrib
 DEFS = ndfdDefs()
 G = Geod(ellps='clrk66')
 
-CACHE_SERVER_BUFFER_MIN = 10
+CACHE_SERVER_BUFFER_MIN = 20
 
 NDFD_LOCAL_SERVER = None
 NDFD_REMOTE_SERVER = 'http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/'
