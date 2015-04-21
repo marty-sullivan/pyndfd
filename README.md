@@ -18,7 +18,6 @@ Python Dependencies:
 1. numpy
 2. pyproj
 3. pygrib
-4. bitstring
 
 Example:
 
