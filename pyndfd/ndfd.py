@@ -65,7 +65,7 @@ NDFD_REMOTE_SERVER = 'http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/'
 NDFD_DIR = 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep + 'VP.{1}' + path.sep
 NDFD_STATIC = 'static' + path.sep + 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep
 NDFD_VAR = 'ds.{0}.bin'
-NDFD_TMP = gettempdir() + path.sep + str(getuser()) + 'pyndfd' + path.sep
+NDFD_TMP = gettempdir() + path.sep + str(getuser()) + '_pyndfd' + path.sep
 
 ########################
 #                      #
