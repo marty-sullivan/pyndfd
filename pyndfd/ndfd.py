@@ -440,7 +440,7 @@ def getForecastAnalysis(var, lat, lon, n=0, timeStep=1, elev=False, minTime=None
     analysis['stdDev'] = float('nan')
     analysis['sum'] = float('nan')
 
-    if len(allVals) > 1:
+    if len(allVals) > 0:
         analysis['min'] = min(allVals)
         analysis['max'] = max(allVals)
         analysis['mean'] = sum(allVals) / len(allVals)
