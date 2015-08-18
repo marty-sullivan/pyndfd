@@ -25,3 +25,5 @@ Example:
     
     analysis = ndfd.getForecastAnalysis('temp', lat, lon)
     weather = ndfd.getWeatherAnalysis(lat, lon)
+
+See demo.py for more info
