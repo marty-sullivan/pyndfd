@@ -538,16 +538,16 @@ def parseWeatherString(wxString):
             ws += 'likely '
 
         for attribute in attributes:
-            if len(attribute) == 0 or '<None>' in attribute:
+            if len(attribute) == 0 or '<None>' in attribute or 'Mention' in attribute:
                 pass
             elif attribute == 'Primary':
                 prepend = True
             elif attribute == 'OR':
                 OR = True
             elif attribute in DEFS['wx']['hazards']:
-                ws += 'with ' + DEFS['wx']['hazards'][attribute]
+                ws += 'with ' + DEFS['wx']['hazards'][attribute] + ' '
             elif attribute in DEFS['wx']['attributes']:
-                ws += DEFS['wx']['attributes'][attribute]
+                ws += DEFS['wx']['attributes'][attribute] + ' '
             else:
                 stderr.write('WARNING: Unknown attribute code: ' + attribute + '\n'); stderr.flush()
 
