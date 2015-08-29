@@ -23,7 +23,7 @@
 	NDFD Forecast Retrieval Routines
 
 	Author: 	Marty J. Sullivan
-	Revision: 	0.6
+	Revision: 	0.8
 	Purpose:	Routines that will cache NDFD forecast variables locally
 			to allow for easy and fast forecast analysis by lat/lon
 
@@ -146,7 +146,8 @@ def getVariable(var, area):
     gribs = []
     dirTime = NDFD_TMP + getLatestForecastTime().strftime('%Y-%m-%d-%H') + path.sep
     if not path.isdir(dirTime):
-        rmtree(NDFD_TMP)
+        try: rmtree(NDFD_TMP)
+        except: pass
         makedirs(dirTime)
     if area in DEFS['vars']:
         for vp in DEFS['vars'][area]:
