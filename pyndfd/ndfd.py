@@ -43,6 +43,7 @@ from ndfd_defs import ndfdDefs
 from numpy.ma.core import MaskedConstant as NAN
 from os import makedirs, path
 from pyproj import Geod, Proj
+from shutil import rmtree
 from sys import stderr
 from tempfile import gettempdir
 from urllib import urlretrieve
@@ -145,6 +146,7 @@ def getVariable(var, area):
     gribs = []
     dirTime = NDFD_TMP + getLatestForecastTime().strftime('%Y-%m-%d-%H') + path.sep
     if not path.isdir(dirTime):
+        rmtree(NDFD_TMP)
         makedirs(dirTime)
     if area in DEFS['vars']:
         for vp in DEFS['vars'][area]:
