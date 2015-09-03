@@ -27,3 +27,5 @@ Example:
     weather = ndfd.getWeatherAnalysis(lat, lon)
 
 See demo.py for more info
+
+See http://www.nws.noaa.gov/ndfd/technical.htm for more info about NDFD variables and areas.
