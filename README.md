@@ -1,4 +1,4 @@
-pyndfd
+PyNDFD
 ====
 
 PyNDFD is an open source Python module that, in one line of code, retrieves up-to-date forecast data from the US National Weather Service - National Digital Forecasting Database. Data can be retrieved for any coordinate within the United States in a fraction of a second. Important decisions can be made easier with rain, wind, temperature and a multitude of other forecast variable monitoring. Weather advisories and weather descriptions are also constructed by PyNDFD. 
