@@ -61,7 +61,7 @@ G = Geod(ellps='clrk66')
 CACHE_SERVER_BUFFER_MIN = 20
 
 NDFD_LOCAL_SERVER = None
-NDFD_REMOTE_SERVER = 'http://weather.noaa.gov/pub/SL.us008001/ST.opnl/DF.gr2/'
+NDFD_REMOTE_SERVER = 'http://tgftp.nws.noaa.gov/SL.us008001/ST.opnl/DF.gr2/'
 NDFD_DIR = 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep + 'VP.{1}' + path.sep
 NDFD_STATIC = 'static' + path.sep + 'DC.ndfd' + path.sep + 'AR.{0}' + path.sep
 NDFD_VAR = 'ds.{0}.bin'
