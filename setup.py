@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
   name = 'pyndfd',
   packages = ['pyndfd'],
-  version = '0.8.2',
+  version = '0.9',
   license = 'MIT License',
   description = 'Python routines for easy caching/retrieval of NWS\'s NDFD variables',
   author = 'Marty J. Sullivan',
