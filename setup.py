@@ -10,6 +10,6 @@ setup(
   author_email = 'marty.sullivan@cornell.edu',
   url = 'https://github.com/marty-sullivan/pyndfd',
   download_url = 'https://github.com/marty-sullivan/pyndfd/tarball/0.8.2',
-  install_requires = ['numpy', 'pygrib', 'pyproj'],
+  install_requires = ['numpy', 'pyproj', 'pygrib'],
   keywords = ['noaa', 'ndfd', 'nws', 'weather', 'forecast', 'cornell', 'atmospheric', 'science']
 )
