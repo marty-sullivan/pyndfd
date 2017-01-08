@@ -39,7 +39,7 @@ lon = -76.449034
 
 
 # variable to get
-var = 'snow'
+var = 'temp'
 
 # time step for forecasts
 timeStep = 3
